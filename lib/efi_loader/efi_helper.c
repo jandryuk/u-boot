@@ -500,7 +500,8 @@ efi_status_t efi_install_fdt(void *fdt)
 		return EFI_LOAD_ERROR;
 	}
 
-	if (CONFIG_IS_ENABLED(GENERATE_ACPI_TABLE)) {
+	/* XXX Disable for testing x86 xen hyperlaunch */
+	if (false && CONFIG_IS_ENABLED(GENERATE_ACPI_TABLE)) {
 		/* Create memory reservations as indicated by the device tree */
 		efi_carve_out_dt_rsv(fdt);
 		return EFI_SUCCESS;
@@ -513,9 +514,12 @@ efi_status_t efi_install_fdt(void *fdt)
 		return EFI_OUT_OF_RESOURCES;
 	}
 
-	if (image_setup_libfdt(&img, fdt, NULL)) {
-		log_err("ERROR: failed to process device tree\n");
-		return EFI_LOAD_ERROR;
+	/* XXX Disable for testing x86 xen hyperlaunch */
+	if (false) {
+		if (image_setup_libfdt(&img, fdt, NULL)) {
+			log_err("ERROR: failed to process device tree\n");
+			return EFI_LOAD_ERROR;
+		}
 	}
 
 	/* Create memory reservations as indicated by the device tree */
